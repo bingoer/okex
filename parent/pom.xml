@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
@@ -17,8 +18,7 @@
   <packaging>pom</packaging>
 
   <name>parent</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <url>https://github.com/wangbei1101/okex</url>
 
   <properties>
     <project.version>1.0-SNAPSHOT</project.version>
@@ -29,11 +29,46 @@
     <java.version>1.8</java.version>
 
     <swagger2.version>2.6.1</swagger2.version>
+    <com.squareup.retrofit2.version>2.4.0</com.squareup.retrofit2.version>
+    <commons-codec.version>1.10</commons-codec.version>
+    <commons-lang3.version>3.6</commons-lang3.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <!-- Swagger API -->
+      <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger2</artifactId>
+        <version>${swagger2.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger-ui</artifactId>
+        <version>${swagger2.version}</version>
+      </dependency>
+      <!-- retrofit2 -->
+      <dependency>
+        <groupId>com.squareup.retrofit2</groupId>
+        <artifactId>retrofit</artifactId>
+        <version>${com.squareup.retrofit2.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.squareup.retrofit2</groupId>
+        <artifactId>converter-jackson</artifactId>
+        <version>${com.squareup.retrofit2.version}</version>
+      </dependency>
 
+      <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>${commons-codec.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>${commons-lang3.version}</version>
+      </dependency>
 
     </dependencies>
   </dependencyManagement>
