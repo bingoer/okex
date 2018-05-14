@@ -12,6 +12,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class TickerApplicationTests {
 
+  private static final String apiKey = "16e8a0dd-78ca-47c7-b52f-f153264f0055";
+  private static final String secretKey = "7C84B3A8CD262AFC61D2D8F0546BD491";
   private OkexRestClient okexRestClient = new OkexOkexRestClientImpl(null, null);
 
   @Test
@@ -19,7 +21,7 @@ public class TickerApplicationTests {
 
   @Test
   public void ticker(){
-    OkexTickerWarpper okexTickerWarpper = okexRestClient.ticker("ltc_btc");
+    OkexTickerWarpper okexTickerWarpper = okexRestClient.ticker("okb_usdt");
     System.out.println(okexTickerWarpper);
   }
 }
