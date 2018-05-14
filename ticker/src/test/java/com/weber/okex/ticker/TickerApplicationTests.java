@@ -1,5 +1,8 @@
 package com.weber.okex.ticker;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import com.weber.okex.ticker.client.OkexRestClient;
 import com.weber.okex.ticker.client.domain.OkexTickerWarpper;
 import com.weber.okex.ticker.client.impl.OkexOkexRestClientImpl;
@@ -16,6 +19,8 @@ public class TickerApplicationTests {
   private static final String secretKey = "7C84B3A8CD262AFC61D2D8F0546BD491";
   private OkexRestClient okexRestClient = new OkexOkexRestClientImpl(null, null);
 
+  private OkexRestClient okexRestClientPost = new OkexOkexRestClientImpl(apiKey, secretKey);
+
   @Test
   public void contextLoads() {}
 
@@ -23,5 +28,16 @@ public class TickerApplicationTests {
   public void ticker(){
     OkexTickerWarpper okexTickerWarpper = okexRestClient.ticker("okb_usdt");
     System.out.println(okexTickerWarpper);
+  }
+
+  @Test
+  public void kline(){
+    List<BigDecimal[]> kline = okexRestClient.kline("okb_usdt", "1min", 50, null);
+    kline.forEach(line -> System.out.println(line[0]));
+  }
+
+  @Test
+  public void userInfo(){
+    System.out.println(okexRestClientPost.userInfo());
   }
 }

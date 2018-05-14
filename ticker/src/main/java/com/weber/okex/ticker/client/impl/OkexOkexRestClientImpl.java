@@ -1,5 +1,8 @@
 package com.weber.okex.ticker.client.impl;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import com.weber.okex.ticker.client.OkexRestClient;
 import com.weber.okex.ticker.client.domain.OkexTickerWarpper;
 
@@ -27,5 +30,15 @@ public class OkexOkexRestClientImpl implements OkexRestClient {
   @Override
   public OkexTickerWarpper ticker(String symbol) {
     return executeSync(okexApiService.ticker(symbol));
+  }
+
+  @Override
+  public List<BigDecimal[]> kline(String symbol, String type, Integer size, Long since) {
+    return executeSync(okexApiService.kline(symbol, type, size, since));
+  }
+
+  @Override
+  public Object userInfo() {
+    return executeSync(okexApiService.userInfo());
   }
 }

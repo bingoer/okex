@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 import com.weber.okex.ticker.client.constants.OkexApiConstants;
+import com.weber.okex.ticker.okexclient.rest.MD5Util;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -46,7 +47,7 @@ public class AuthenticationInterceptor implements Interceptor {
             String payload = original.url().query();
             if (!StringUtils.isEmpty(payload)) {
                 String signature = HmacSHA256Signer.sign(payload, secret);
-                HttpUrl signedUrl = original.url().newBuilder().addQueryParameter("signature", signature).build();
+                HttpUrl signedUrl = original.url().newBuilder().addQueryParameter("api_key", apiKey).build();
                 newRequestBuilder.url(signedUrl);
             }
         }

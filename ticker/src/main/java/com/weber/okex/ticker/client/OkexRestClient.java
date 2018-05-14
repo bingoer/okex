@@ -1,5 +1,8 @@
 package com.weber.okex.ticker.client;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import com.weber.okex.ticker.client.domain.OkexTickerWarpper;
 
 /**
@@ -15,5 +18,10 @@ public interface OkexRestClient {
   void ping();
 
   OkexTickerWarpper ticker(String symbol);
+
+
+  List<BigDecimal[]> kline(String symbol, String type, Integer size, Long since);
+
+  Object userInfo();
 
 }
