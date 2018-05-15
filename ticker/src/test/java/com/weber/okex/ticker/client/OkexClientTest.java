@@ -12,7 +12,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -21,6 +23,8 @@ public class OkexClientTest {
 
   @Value("${okex.test.symbol}")
   private String symbol;
+  @Value("${okex.test.period.type}")
+  private String periodType;
 
   @Autowired
   OkexClient okexClient;
@@ -45,7 +49,7 @@ public class OkexClientTest {
 
   @Test
   public void kline() throws IOException, HttpException {
-    List<OkexKline> klines = okexClient.kline(symbol, "1min", null, null);
+    List<OkexKline> klines = okexClient.kline(symbol, periodType, null, null);
     System.out.println(klines);
   }
 

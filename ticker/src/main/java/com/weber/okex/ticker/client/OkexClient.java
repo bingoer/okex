@@ -115,7 +115,7 @@ public class OkexClient {
   }
 
   /**
-   * 现货用户信息
+   * 现货用户信息 访问频率 6次/2秒
    *
    * @return
    * @throws IOException
