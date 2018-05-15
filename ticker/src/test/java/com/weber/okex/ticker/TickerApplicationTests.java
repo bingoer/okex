@@ -8,6 +8,7 @@ import com.weber.okex.ticker.client.domain.OkexTickerWarpper;
 import com.weber.okex.ticker.client.impl.OkexOkexRestClientImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -15,8 +16,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class TickerApplicationTests {
 
-  private static final String apiKey = "16e8a0dd-78ca-47c7-b52f-f153264f0055";
-  private static final String secretKey = "7C84B3A8CD262AFC61D2D8F0546BD491";
+  @Value("${okex.apikey}")
+  private String apiKey;
+
+  @Value("${okex.secretkey}")
+  private String secretKey;
+
   private OkexRestClient okexRestClient = new OkexOkexRestClientImpl(null, null);
 
   private OkexRestClient okexRestClientPost = new OkexOkexRestClientImpl(apiKey, secretKey);
