@@ -43,6 +43,11 @@ public class StockRestApi implements IStockRestApi {
 	 * 现货历史交易信息URL
 	 */
 	private final String TRADES_URL = "/api/v1/trades.do?";
+
+	/**
+	 * 获取OKEx币币K线数据(每个周期数据条数2000左右)
+	 */
+	private final String KLINE_URL = "/api/v1/kline.do?";
 	
 	/**
 	 * 现货获取用户信息URL
@@ -125,6 +130,39 @@ public class StockRestApi implements IStockRestApi {
 		}
 		String result = httpUtil.requestHttpGet(url_prex, this.TRADES_URL, param);
 	    return result;
+	}
+
+	@Override
+	public String kline(String symbol, String type, String size, String since)
+			throws HttpException, IOException {
+		HttpUtilManager httpUtil = HttpUtilManager.getInstance();
+		String param = "";
+		if(!StringUtil.isEmpty(symbol )) {
+			if (!param.equals("")) {
+				param += "&";
+			}
+			param += "symbol=" + symbol;
+		}
+		if(!StringUtil.isEmpty(type )) {
+			if (!param.equals("")) {
+				param += "&";
+			}
+			param += "type=" + type;
+		}
+		if(!StringUtil.isEmpty(size )) {
+			if (!param.equals("")) {
+				param += "&";
+			}
+			param += "size=" + size;
+		}
+		if(!StringUtil.isEmpty(since )) {
+			if (!param.equals("")) {
+				param += "&";
+			}
+			param += "since=" + since;
+		}
+		String result = httpUtil.requestHttpGet(url_prex, this.KLINE_URL, param);
+		return result;
 	}
 
 	@Override
