@@ -8,6 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class OkexTickerWarpper {
+  private String symbol;
   private Long date;
   private OkexTicker ticker;
 }

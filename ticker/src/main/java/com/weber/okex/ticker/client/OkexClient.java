@@ -3,8 +3,8 @@ package com.weber.okex.ticker.client;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -14,6 +14,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.weber.okex.ticker.client.domain.OkexAccountBalance;
 import com.weber.okex.ticker.client.domain.OkexAccountBalanceWarpper;
 import com.weber.okex.ticker.client.domain.OkexKline;
+import com.weber.okex.ticker.client.domain.OkexTickerWarpper;
 import com.weber.okex.ticker.okexclient.rest.stock.IStockRestApi;
 import com.weber.okex.ticker.okexclient.rest.stock.impl.StockRestApi;
 import org.apache.commons.collections4.CollectionUtils;
@@ -55,8 +56,11 @@ public class OkexClient {
    * @throws IOException
    * @throws HttpException
    */
-  public String ticker(String symbol) throws IOException, HttpException {
-    return stockGet.ticker(symbol);
+  public OkexTickerWarpper ticker(String symbol) throws IOException, HttpException {
+    String resultStr = stockGet.ticker(symbol);
+    OkexTickerWarpper okexTickerWarpper = JSON.parseObject(resultStr, OkexTickerWarpper.class);
+    okexTickerWarpper.setSymbol(symbol);
+    return okexTickerWarpper;
   }
 
   /**
@@ -104,12 +108,13 @@ public class OkexClient {
         OkexKline kline = new OkexKline();
         kline.setDateMs(Long.valueOf(array[0]));
         kline.setOpen(new BigDecimal(array[1]));
-        kline.setHigh(new BigDecimal(array[1]));
-        kline.setLow(new BigDecimal(array[1]));
-        kline.setClose(new BigDecimal(array[1]));
-        kline.setVol(new BigDecimal(array[1]));
+        kline.setHigh(new BigDecimal(array[2]));
+        kline.setLow(new BigDecimal(array[3]));
+        kline.setClose(new BigDecimal(array[4]));
+        kline.setVol(new BigDecimal(array[5]));
         klines.add(kline);
       });
+      Collections.reverse(klines);
     }
     return klines;
   }
