@@ -86,14 +86,14 @@ public class KlineSchedule {
             KlineResult klineResult1min = strategyService.analyseKline(list1min);
             if (klineResult1min.isSuccess()) {
               klineResult1min.setSymbol(symbol);
-              System.out.println(symbol + " is success! time is:" + dateFormat.format(new Date()));
+              System.out.println(symbol + " is up now! time is:" + dateFormat.format(new Date()) + "\n" + klineResult1min.getMsg());
             }
           } catch (IOException e) {
             e.printStackTrace();
           } catch (HttpException e) {
             e.printStackTrace();
           } catch (Throwable e) {
-            log.error("symbol={}," + dateFormat.format(new Date()), symbol);
+            log.error("symbol={}, time is:{}", symbol, dateFormat.format(new Date()));
             e.printStackTrace();
           }
         });
