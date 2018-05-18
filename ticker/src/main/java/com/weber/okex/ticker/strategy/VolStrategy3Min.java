@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.weber.okex.ticker.client.domain.OkexKline;
 import com.weber.okex.ticker.data.KlineResult;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,6 +14,9 @@ public class VolStrategy3Min<T> extends AbstratStractegy<KlineResult> {
 
   String symbol;
   List<OkexKline> klines;
+
+  @Value("${okex.kline.strategy.times2}")
+  private Integer strategyTimes;
 
   public VolStrategy3Min<T> build(String symbol, List<OkexKline> klines) {
     this.symbol = symbol;
@@ -32,7 +36,7 @@ public class VolStrategy3Min<T> extends AbstratStractegy<KlineResult> {
         continue;
       }
       BigDecimal times = first.getVol().divide(klines.get(i).getVol(), 2, BigDecimal.ROUND_HALF_UP);
-      if (times.compareTo(new BigDecimal(3))  < 0) {
+      if (times.compareTo(new BigDecimal(strategyTimes))  < 0) {
         return KlineResult.buildFailWithSymbol(symbol, null);
       }
 

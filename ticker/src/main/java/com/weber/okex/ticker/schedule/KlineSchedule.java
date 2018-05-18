@@ -14,8 +14,10 @@ import com.weber.okex.ticker.client.domain.OkexTickerWarpper;
 import com.weber.okex.ticker.data.KlineResult;
 import com.weber.okex.ticker.data.TickerResult;
 import com.weber.okex.ticker.service.StrategyService;
+import com.weber.okex.ticker.strategy.PriceStrategy15Min;
 import com.weber.okex.ticker.strategy.PriceStrategy1Min;
 import com.weber.okex.ticker.strategy.PriceStrategy3Min;
+import com.weber.okex.ticker.strategy.VolStrategy15Min;
 import com.weber.okex.ticker.strategy.VolStrategy1Min;
 import com.weber.okex.ticker.strategy.VolStrategy3Min;
 import lombok.extern.slf4j.Slf4j;
@@ -51,12 +53,17 @@ public class KlineSchedule {
   @Autowired
   private PriceStrategy1Min<KlineResult> priceStrategy1Min;
 
-
   @Autowired
   private VolStrategy3Min<KlineResult> volStrategy3Min;
 
   @Autowired
   private PriceStrategy3Min<KlineResult> priceStrategy3Min;
+
+  @Autowired
+  private VolStrategy15Min<KlineResult> volStrategy15Min;
+
+  @Autowired
+  private PriceStrategy15Min<KlineResult> priceStrategy15Min;
 
   @PostConstruct
   private void init(){
@@ -83,7 +90,7 @@ public class KlineSchedule {
     log.info("mayjorSymbols=" + mayjorSymbols);
   }
 
-//  @Scheduled(fixedRate = 1000)
+  @Scheduled(fixedRate = 1000)
   public void analyse() {
     mayjorSymbols.forEach(
         symbol -> {
@@ -108,17 +115,17 @@ public class KlineSchedule {
   }
 
 
-  @Scheduled(fixedRate = 1000)
-  public void analyse3Min() {
+//  @Scheduled(fixedRate = 1000)
+  public void analyse15Min() {
     mayjorSymbols.forEach(
         symbol -> {
           try {
             List<OkexKline> klines = okexClient.kline(symbol, periodTypes.get(1), klineSize, null);
-            KlineResult result = volStrategy3Min.build(symbol, klines).execute();
+            KlineResult result = volStrategy15Min.build(symbol, klines).execute();
             if (result.isSuccess()) {
               String msg = result.getMsg();
               System.out.println(symbol +  msg);
-              result = priceStrategy3Min.build(symbol, klines).execute();
+              result = priceStrategy15Min.build(symbol, klines).execute();
               if (result.isSuccess()) {
                 result.setMsg(msg + result.getMsg());
                 System.out.println(result);

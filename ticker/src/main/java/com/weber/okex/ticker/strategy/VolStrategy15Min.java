@@ -10,15 +10,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class VolStrategy1Min<T> extends AbstratStractegy<KlineResult> {
+public class VolStrategy15Min<T> extends AbstratStractegy<KlineResult> {
 
   String symbol;
   List<OkexKline> klines;
 
-  @Value("${okex.kline.strategy.times3}")
+  @Value("${okex.kline.strategy.times2}")
   private Integer strategyTimes;
 
-  public VolStrategy1Min<T> build(String symbol, List<OkexKline> klines) {
+  public VolStrategy15Min<T> build(String symbol, List<OkexKline> klines) {
     this.symbol = symbol;
     this.klines = klines;
     return this;
@@ -33,7 +33,7 @@ public class VolStrategy1Min<T> extends AbstratStractegy<KlineResult> {
     }
     for (int i = 1; i < klines.size(); i++) {
       if (klines.get(i).getVol().compareTo(BigDecimal.ZERO) <= 0) {
-        return KlineResult.buildFailWithSymbol(symbol, null);
+        continue;
       }
       BigDecimal times = first.getVol().divide(klines.get(i).getVol(), 2, BigDecimal.ROUND_HALF_UP);
       if (times.compareTo(new BigDecimal(strategyTimes))  < 0) {
@@ -41,7 +41,7 @@ public class VolStrategy1Min<T> extends AbstratStractegy<KlineResult> {
       }
 
       if (i == 1) {
-        msg = MessageFormat.format("1分钟内成交量翻了{0}倍以上[after:{1},before:{2}]-",
+        msg = MessageFormat.format("15分钟内成交量翻了{0}倍以上[after:{1},before:{2}]-",
             times.toPlainString(), first.getVol().toPlainString(), klines.get(i).getVol().toPlainString());
       } else {
         times = klines.get(i-1).getVol().divide(klines.get(i).getVol(), 2, BigDecimal.ROUND_HALF_UP);
