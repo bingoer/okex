@@ -62,8 +62,9 @@ public class StrategyServiceImpl implements StrategyService {
       return KlineResult.buildFail();
     }
     BigDecimal times = first.getVol().divide(secend.getVol(), 2, BigDecimal.ROUND_HALF_UP);
-    if (times.compareTo(new BigDecimal(3))  >= 0) {
-      msg += MessageFormat.format("1分钟内成交量翻了{0}倍以上[{1},{2}]", times.toPlainString(), first.getVol(), secend.getVol());
+    if (times.compareTo(new BigDecimal(5))  >= 0) {
+      msg += MessageFormat.format("1分钟内成交量翻了{0}倍以上[after:{1},before:{2}]",
+          times.toPlainString(), first.getVol().toPlainString(), secend.getVol().toPlainString());
       if (secend.getVol().subtract(third.getVol()).compareTo(BigDecimal.ZERO) >= 0) {
         return KlineResult.buildSuccess(msg);
       }
@@ -82,10 +83,12 @@ public class StrategyServiceImpl implements StrategyService {
     OkexKline first = klines.get(0);
     OkexKline secend = klines.get(1);
     OkexKline third = klines.get(2);
-    if (first.getClose().divide(first.getOpen(), 2, BigDecimal.ROUND_HALF_UP).compareTo(new BigDecimal("1.01")) >= 0) {
-      msg += MessageFormat.format("1分钟内价格涨了2%以上[{0},{1}]", first.getClose(), first.getOpen());
+    if (first.getClose().divide(first.getOpen(), 2, BigDecimal.ROUND_HALF_UP).compareTo(new BigDecimal("1.05")) >= 0) {
+      msg += MessageFormat.format("1分钟内价格涨了5%以上[after:{0},before:{1}]",
+          first.getClose().toPlainString(), first.getOpen().toPlainString());
       if (secend.getClose().subtract(secend.getOpen()).compareTo(BigDecimal.ZERO) >= 0) {
-        msg += MessageFormat.format("1分钟前价格也是上涨[{0},{1}]", secend.getClose(), secend.getOpen());
+        msg += MessageFormat.format("1分钟前价格也是上涨[after:{0},before:{1}]",
+            secend.getClose().toPlainString(), secend.getOpen().toPlainString());
       } else {
         return KlineResult.buildFail();
       }

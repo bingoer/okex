@@ -14,6 +14,10 @@ import com.weber.okex.ticker.client.domain.OkexTickerWarpper;
 import com.weber.okex.ticker.data.KlineResult;
 import com.weber.okex.ticker.data.TickerResult;
 import com.weber.okex.ticker.service.StrategyService;
+import com.weber.okex.ticker.strategy.PriceStrategy1Min;
+import com.weber.okex.ticker.strategy.PriceStrategy3Min;
+import com.weber.okex.ticker.strategy.VolStrategy1Min;
+import com.weber.okex.ticker.strategy.VolStrategy3Min;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,18 +45,21 @@ public class KlineSchedule {
 
   @Autowired private StrategyService strategyService;
 
+  @Autowired
+  private VolStrategy1Min<KlineResult> volStrategy1Min;
+
+  @Autowired
+  private PriceStrategy1Min<KlineResult> priceStrategy1Min;
+
+
+  @Autowired
+  private VolStrategy3Min<KlineResult> volStrategy3Min;
+
+  @Autowired
+  private PriceStrategy3Min<KlineResult> priceStrategy3Min;
+
   @PostConstruct
   private void init(){
-    mayjorSymbols = symbols;
-  }
-
-  @Scheduled(fixedRate = 5000)
-  public void reportCurrentTime() {
-    System.out.println("现在时间：" + dateFormat.format(new Date()));
-  }
-
-  @Scheduled(fixedRate = 10000)
-  public void ticker() {
     List<String> tempMayjorSymbols = new ArrayList<>();
     symbols.forEach(
         symbol -> {
@@ -76,17 +83,66 @@ public class KlineSchedule {
     log.info("mayjorSymbols=" + mayjorSymbols);
   }
 
+//  @Scheduled(fixedRate = 1000)
+  public void analyse() {
+    mayjorSymbols.forEach(
+        symbol -> {
+          try {
+            List<OkexKline> klines = okexClient.kline(symbol, periodTypes.get(0), klineSize, null);
+            KlineResult result = volStrategy1Min.build(symbol, klines).execute();
+            if (result.isSuccess()) {
+              String msg = result.getMsg();
+              System.out.println(symbol +  msg);
+              result = priceStrategy1Min.build(symbol, klines).execute();
+              if (result.isSuccess()) {
+                result.setMsg(msg + result.getMsg());
+                System.out.println(result);
+              }
+            }
+          } catch (IOException e) {
+            e.printStackTrace();
+          } catch (HttpException e) {
+            e.printStackTrace();
+          }
+        });
+  }
+
+
   @Scheduled(fixedRate = 1000)
+  public void analyse3Min() {
+    mayjorSymbols.forEach(
+        symbol -> {
+          try {
+            List<OkexKline> klines = okexClient.kline(symbol, periodTypes.get(1), klineSize, null);
+            KlineResult result = volStrategy3Min.build(symbol, klines).execute();
+            if (result.isSuccess()) {
+              String msg = result.getMsg();
+              System.out.println(symbol +  msg);
+              result = priceStrategy3Min.build(symbol, klines).execute();
+              if (result.isSuccess()) {
+                result.setMsg(msg + result.getMsg());
+                System.out.println(result);
+              }
+            }
+          } catch (IOException e) {
+            e.printStackTrace();
+          } catch (HttpException e) {
+            e.printStackTrace();
+          }
+        });
+  }
+
+//  @Scheduled(fixedRate = 1000)
   public void kline() {
     mayjorSymbols.forEach(
         symbol -> {
           try {
-            List<OkexKline> list1min =
+            List<OkexKline> list =
                 okexClient.kline(symbol, periodTypes.get(0), klineSize, null);
-            KlineResult klineResult1min = strategyService.analyseKline(list1min);
-            if (klineResult1min.isSuccess()) {
-              klineResult1min.setSymbol(symbol);
-              System.out.println(symbol + " is up now! time is:" + dateFormat.format(new Date()) + "\n" + klineResult1min.getMsg());
+            KlineResult klineResult = strategyService.analyseKline(list);
+            if (klineResult.isSuccess()) {
+              klineResult.setSymbol(symbol);
+              System.out.println(symbol + " is up now! time is:" + dateFormat.format(new Date()) + "\n" + klineResult.getMsg());
             }
           } catch (IOException e) {
             e.printStackTrace();

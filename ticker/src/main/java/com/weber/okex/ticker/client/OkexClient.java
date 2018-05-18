@@ -9,6 +9,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.weber.okex.ticker.client.domain.OkexAccountBalance;
@@ -17,11 +18,13 @@ import com.weber.okex.ticker.client.domain.OkexKline;
 import com.weber.okex.ticker.client.domain.OkexTickerWarpper;
 import com.weber.okex.ticker.okexclient.rest.stock.IStockRestApi;
 import com.weber.okex.ticker.okexclient.rest.stock.impl.StockRestApi;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.http.HttpException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class OkexClient {
 
@@ -102,7 +105,13 @@ public class OkexClient {
       throws IOException, HttpException {
     List<OkexKline> klines = new ArrayList<>();
     String resultStr = stockGet.kline(symbol, type, size, since);
-    List<String[]> rawList = JSON.parseObject(resultStr, new TypeReference<List<String[]>>(){});
+    List<String[]> rawList = null;
+    try {
+      rawList = JSON.parseObject(resultStr, new TypeReference<List<String[]>>(){});
+    } catch (JSONException e) {
+      log.error("json string error:{}", resultStr);
+      e.printStackTrace();
+    }
     if (CollectionUtils.isNotEmpty(rawList)) {
       rawList.forEach(array->{
         OkexKline kline = new OkexKline();

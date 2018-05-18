@@ -15,11 +15,12 @@ public class KlineResult {
   private String msg;
 
   public KlineResult(int success) {
-    new KlineResult(success, null);
+    new KlineResult(success, null, null);
   }
 
-  public KlineResult(int success, String msg) {
+  public KlineResult(int success, String symbol, String msg) {
     this.success = success;
+    this.symbol = symbol;
     this.msg = msg;
   }
 
@@ -32,11 +33,19 @@ public class KlineResult {
   }
 
   public static KlineResult buildSuccess(String msg) {
-    return new KlineResult(SUCCESS, msg);
+    return new KlineResult(SUCCESS, null, msg);
   }
 
   public static KlineResult buildFail(String msg) {
-    return new KlineResult(FAIL, msg);
+    return new KlineResult(FAIL, null, msg);
+  }
+
+  public static KlineResult buildSuccessWithSymbol(String symbol, String msg) {
+    return new KlineResult(SUCCESS, symbol, msg);
+  }
+
+  public static KlineResult buildFailWithSymbol(String symbol, String msg) {
+    return new KlineResult(FAIL, symbol, msg);
   }
 
   public boolean isSuccess(){

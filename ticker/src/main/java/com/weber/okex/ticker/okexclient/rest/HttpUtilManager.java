@@ -56,7 +56,11 @@ public class HttpUtilManager {
 	  
 	};
 	private HttpUtilManager() {
-		client = HttpClients.custom().setConnectionManager(cm).setKeepAliveStrategy(keepAliveStrat).build(); 
+		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(2000).setConnectTimeout(2000).build();//设置请求和传输超时时间
+		client = HttpClients.custom().setConnectionManager(cm)
+				.setKeepAliveStrategy(keepAliveStrat)
+				.setDefaultRequestConfig(requestConfig)
+				.build();
 	}
 
     public static void IdleConnectionMonitor(){
