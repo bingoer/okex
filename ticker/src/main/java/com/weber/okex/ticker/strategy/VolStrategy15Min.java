@@ -35,7 +35,7 @@ public class VolStrategy15Min<T> extends AbstratStractegy<KlineResult> {
       if (klines.get(i).getVol().compareTo(BigDecimal.ZERO) <= 0) {
         continue;
       }
-      BigDecimal times = first.getVol().divide(klines.get(i).getVol(), 2, BigDecimal.ROUND_HALF_UP);
+      BigDecimal times = first.getVol().divide(klines.get(i).getVol(), 2, BigDecimal.ROUND_DOWN);
       if (times.compareTo(new BigDecimal(strategyTimes))  < 0) {
         return KlineResult.buildFailWithSymbol(symbol, null);
       }

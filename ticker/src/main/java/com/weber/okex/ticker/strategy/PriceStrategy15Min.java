@@ -33,9 +33,9 @@ public class PriceStrategy15Min<T> extends AbstratStractegy<KlineResult> {
     if (first.getClose().divide(first.getOpen(), 2, BigDecimal.ROUND_HALF_UP).compareTo(new BigDecimal("1.02")) >= 0) {
       msg += MessageFormat.format("15分钟内价格涨了2%以上[after:{0},before:{1}]-",
           first.getClose().toPlainString(), first.getOpen().toPlainString());
-      if (secend.getClose().subtract(secend.getOpen()).compareTo(BigDecimal.ZERO) >= 0) {
-        msg += MessageFormat.format("15分钟前价格也是上涨[after:{0},before:{1}]-",
-            secend.getClose().toPlainString(), secend.getOpen().toPlainString());
+      if (first.getClose().subtract(secend.getClose()).compareTo(BigDecimal.ZERO) >= 0) {
+        msg += MessageFormat.format("当前价格比15分钟前高[after:{0},before:{1}]-",
+            first.getClose().toPlainString(), secend.getClose().toPlainString());
       } else {
         return KlineResult.buildFailWithSymbol(symbol, null);
       }

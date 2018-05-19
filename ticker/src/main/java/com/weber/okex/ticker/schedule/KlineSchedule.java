@@ -90,7 +90,7 @@ public class KlineSchedule {
     log.info("mayjorSymbols=" + mayjorSymbols);
   }
 
-  @Scheduled(fixedRate = 1000)
+//  @Scheduled(fixedRate = 1000)
   public void analyse() {
     mayjorSymbols.forEach(
         symbol -> {
@@ -98,7 +98,7 @@ public class KlineSchedule {
             List<OkexKline> klines = okexClient.kline(symbol, periodTypes.get(0), klineSize, null);
             KlineResult result = volStrategy1Min.build(symbol, klines).execute();
             if (result.isSuccess()) {
-              String msg = result.getMsg();
+              String msg = result.getMsg() + "";
               System.out.println(symbol +  msg);
               result = priceStrategy1Min.build(symbol, klines).execute();
               if (result.isSuccess()) {
@@ -115,12 +115,12 @@ public class KlineSchedule {
   }
 
 
-//  @Scheduled(fixedRate = 1000)
+  @Scheduled(fixedRate = 1000)
   public void analyse15Min() {
     mayjorSymbols.forEach(
         symbol -> {
           try {
-            List<OkexKline> klines = okexClient.kline(symbol, periodTypes.get(1), klineSize, null);
+            List<OkexKline> klines = okexClient.kline(symbol, periodTypes.get(3), klineSize, null);
             KlineResult result = volStrategy15Min.build(symbol, klines).execute();
             if (result.isSuccess()) {
               String msg = result.getMsg();
