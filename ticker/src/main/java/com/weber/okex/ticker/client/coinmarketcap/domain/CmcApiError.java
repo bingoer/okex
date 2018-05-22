@@ -1,4 +1,4 @@
-package com.weber.okex.ticker.client.domain;
+package com.weber.okex.ticker.client.coinmarketcap.domain;
 
 import com.weber.okex.ticker.client.constants.OkexApiConstants;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 /**
  * API error object.
  */
-public class OkexApiError {
+public class CmcApiError {
 
   /**
    * Error code.

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weber.okex.ticker.repository.CmcSymbolMapper">
+  <resultMap id="BaseResultMap" type="com.weber.okex.ticker.model.CmcSymbol">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="symbol" jdbcType="VARCHAR" property="symbol" />
+    <result column="website_slug" jdbcType="VARCHAR" property="websiteSlug" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, symbol, website_slug
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_cmc_symbol
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.weber.okex.ticker.model.CmcSymbol" useGeneratedKeys="true">
+    insert into t_cmc_symbol (name, symbol, website_slug
+      )
+    values (#{name,jdbcType=VARCHAR}, #{symbol,jdbcType=VARCHAR}, #{websiteSlug,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.weber.okex.ticker.model.CmcSymbol" useGeneratedKeys="true">
+    insert into t_cmc_symbol
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        name,
+      </if>
+      <if test="symbol != null">
+        symbol,
+      </if>
+      <if test="websiteSlug != null">
+        website_slug,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="symbol != null">
+        #{symbol,jdbcType=VARCHAR},
+      </if>
+      <if test="websiteSlug != null">
+        #{websiteSlug,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.weber.okex.ticker.model.CmcSymbol">
+    update t_cmc_symbol
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="symbol != null">
+        symbol = #{symbol,jdbcType=VARCHAR},
+      </if>
+      <if test="websiteSlug != null">
+        website_slug = #{websiteSlug,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.weber.okex.ticker.model.CmcSymbol">
+    update t_cmc_symbol
+    set name = #{name,jdbcType=VARCHAR},
+      symbol = #{symbol,jdbcType=VARCHAR},
+      website_slug = #{websiteSlug,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

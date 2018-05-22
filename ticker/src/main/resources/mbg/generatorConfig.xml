@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE generatorConfiguration PUBLIC
+ "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+ "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+	<!-- mvn mybatis-generator:generate -->
+
+	<context id="Mysql" targetRuntime="MyBatis3" defaultModelType="flat">
+		<property name="beginningDelimiter" value="`" />
+		<property name="endingDelimiter" value="`" />
+		<property name="javaFileEncoding" value="UTF-8" />
+
+		<plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+			<property name="searchString" value="Example$" />
+			<property name="replaceString" value="Query" />
+		</plugin>
+
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+			<property name="suppressDate" value="true" />
+		</commentGenerator>
+
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://localhost:3306/trading" userId="root"
+			password="18510917075">
+		</jdbcConnection>
+
+		<!-- 生成Model对象 -->
+		<javaModelGenerator targetPackage="${targetModelPackage}"
+			targetProject="${targetJavaProject}">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<!-- 生成XML -->
+		<sqlMapGenerator targetPackage="${targetXMLPackage}"
+			targetProject="${targetResourcesProject}" />
+
+		<!-- 生成Mapper -->
+		<javaClientGenerator targetPackage="${targetMapperPackage}"
+			targetProject="${targetJavaProject}" type="XMLMAPPER" />
+
+		<table tableName="t_cmc_symbol" domainObjectName="CmcSymbol"
+			enableInsert="true"
+			enableSelectByPrimaryKey="true"
+			enableUpdateByPrimaryKey="true"
+			enableSelectByExample="false"
+			enableDeleteByPrimaryKey="false"
+			enableDeleteByExample="false"
+			enableCountByExample="false"
+			enableUpdateByExample="false"
+			selectByPrimaryKeyQueryId="false"
+			selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="JDBC" identity="true" />
+		</table>
+	</context>
+</generatorConfiguration>
