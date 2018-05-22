@@ -1,5 +1,7 @@
 package com.weber.okex.ticker.repository;
 
+import java.util.Collection;
+
 import com.weber.okex.ticker.model.CmcSymbol;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -14,4 +16,10 @@ public interface CmcSymbolMapper {
     int updateByPrimaryKeySelective(CmcSymbol record);
 
     int updateByPrimaryKey(CmcSymbol record);
+
+    void insertSelectiveSymbols(Collection<CmcSymbol> symbols);
+
+    CmcSymbol selectBySymbol();
+
+    Collection<CmcSymbol> selectAll();
 }

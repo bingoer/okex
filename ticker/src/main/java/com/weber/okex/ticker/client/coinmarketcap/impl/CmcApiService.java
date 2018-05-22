@@ -3,6 +3,7 @@ package com.weber.okex.ticker.client.coinmarketcap.impl;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.weber.okex.ticker.client.coinmarketcap.domain.CmcSymbolWarpper;
 import com.weber.okex.ticker.client.domain.OkexDepthWarpper;
 import com.weber.okex.ticker.client.domain.OkexTickerWarpper;
 import retrofit2.Call;
@@ -16,7 +17,7 @@ public interface CmcApiService {
   // General endpoints
 
   @GET("/v2/listings/")
-  Call<Void> listings();
+  Call<CmcSymbolWarpper> listings();
 
   /**
    * 获取OKEx币币行情
@@ -24,7 +25,7 @@ public interface CmcApiService {
    * @param symbol
    * @return
    */
-  @GET("/api/v1/ticker.do")
+  @GET("/v2/ticker/")
   Call<OkexTickerWarpper> ticker(@Query("symbol") String symbol);
 
   /**
