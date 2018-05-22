@@ -4,22 +4,25 @@ import java.util.Collection;
 
 import com.weber.okex.ticker.model.CmcSymbol;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface CmcSymbolMapper {
-    int insert(CmcSymbol record);
+  int insert(CmcSymbol record);
 
-    int insertSelective(CmcSymbol record);
+  int insertSelective(CmcSymbol record);
 
-    CmcSymbol selectByPrimaryKey(Long id);
+  int insertSymbols(@Param("symbols") Collection<CmcSymbol> symbols);
 
-    int updateByPrimaryKeySelective(CmcSymbol record);
+  CmcSymbol selectByPrimaryKey(Long id);
 
-    int updateByPrimaryKey(CmcSymbol record);
+  CmcSymbol selectBySymbol(@Param("symbol") String symbol);
 
-    void insertSelectiveSymbols(Collection<CmcSymbol> symbols);
+  Collection<CmcSymbol> selectAll();
 
-    CmcSymbol selectBySymbol();
+  int updateByPrimaryKeySelective(CmcSymbol record);
 
-    Collection<CmcSymbol> selectAll();
+  int updateByPrimaryKey(CmcSymbol record);
+
+  int truncate();
 }

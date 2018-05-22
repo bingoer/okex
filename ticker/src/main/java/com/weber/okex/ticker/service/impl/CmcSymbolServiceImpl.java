@@ -15,18 +15,24 @@ public class CmcSymbolServiceImpl implements CmcSymbolService {
   private CmcSymbolMapper cmcSymbolMapper;
 
   @Override
-  public void save(CmcSymbol symbol) {
-    cmcSymbolMapper.insertSelective(symbol);
+  public int save(CmcSymbol symbol) {
+    return cmcSymbolMapper.insertSelective(symbol);
   }
 
   @Override
-  public void save(Collection<CmcSymbol> symbols) {
-    cmcSymbolMapper.insertSelectiveSymbols(symbols);
+  public int save(Collection<CmcSymbol> symbols) {
+    return cmcSymbolMapper.insertSymbols(symbols);
+  }
+
+  @Override
+  public int emptyAndsave(Collection<CmcSymbol> symbols) {
+    cmcSymbolMapper.truncate();
+    return cmcSymbolMapper.insertSymbols(symbols);
   }
 
   @Override
   public CmcSymbol getSymbol(String symbol) {
-    return cmcSymbolMapper.selectBySymbol();
+    return cmcSymbolMapper.selectBySymbol(symbol);
   }
 
   @Override

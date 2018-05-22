@@ -1,27 +1,27 @@
-package com.weber.okex.ticker.client;
+package com.weber.okex.ticker.runner;
 
 import java.util.Collection;
 
 import com.weber.okex.ticker.client.coinmarketcap.CmcRestClient;
 import com.weber.okex.ticker.model.CmcSymbol;
 import com.weber.okex.ticker.service.CmcSymbolService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class CmcRestClientTest {
+@Slf4j
+@Component
+public class CmcRunner implements CommandLineRunner {
 
   @Autowired private CmcRestClient cmcRestClient;
   @Autowired private CmcSymbolService cmcSymbolService;
 
-  @Test
-  public void listings() {
+  @Override
+  public void run(String... args) {
     Collection<CmcSymbol> symbols = cmcRestClient.listings();
     System.out.println(symbols);
     cmcSymbolService.emptyAndsave(symbols);
+    log.info("CmcRunner Successful!");
   }
 }

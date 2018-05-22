@@ -6,9 +6,11 @@ import com.weber.okex.ticker.model.CmcSymbol;
 
 public interface CmcSymbolService {
 
-  void save(CmcSymbol symbol);
+  int save(CmcSymbol symbol);
 
-  void save(Collection<CmcSymbol> symbols);
+  int save(Collection<CmcSymbol> symbols);
+
+  int emptyAndsave(Collection<CmcSymbol> symbols);
 
   CmcSymbol getSymbol(String symbol);
 

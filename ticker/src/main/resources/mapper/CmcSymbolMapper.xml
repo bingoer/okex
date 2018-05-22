@@ -1,28 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.weber.okex.ticker.repository.CmcSymbolMapper">
   <resultMap id="BaseResultMap" type="com.weber.okex.ticker.model.CmcSymbol">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="symbol" jdbcType="VARCHAR" property="symbol" />
-    <result column="website_slug" jdbcType="VARCHAR" property="websiteSlug" />
+    <id column="id" jdbcType="BIGINT" property="id"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="symbol" jdbcType="VARCHAR" property="symbol"/>
+    <result column="website_slug" jdbcType="VARCHAR" property="websiteSlug"/>
   </resultMap>
   <sql id="Base_Column_List">
     id, name, symbol, website_slug
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 'false' as QUERYID,
-    <include refid="Base_Column_List" />
+    <include refid="Base_Column_List"/>
     from t_cmc_symbol
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.weber.okex.ticker.model.CmcSymbol" useGeneratedKeys="true">
-    insert into t_cmc_symbol (name, symbol, website_slug
-      )
-    values (#{name,jdbcType=VARCHAR}, #{symbol,jdbcType=VARCHAR}, #{websiteSlug,jdbcType=VARCHAR}
-      )
+  <select id="selectBySymbol" resultMap="BaseResultMap">
+    select 'false' as QUERYID,
+    <include refid="Base_Column_List"/>
+    from t_cmc_symbol
+    where symbole = #{symbole}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 'false' as QUERYID,
+    <include refid="Base_Column_List"/>
+    from t_cmc_symbol
+    where 1=1
+  </select>
+  <insert id="insert">
+    insert into t_cmc_symbol (name, symbol, website_slug)
+    values (#{name,jdbcType=VARCHAR}, #{symbol,jdbcType=VARCHAR}, #{websiteSlug,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.weber.okex.ticker.model.CmcSymbol" useGeneratedKeys="true">
+  <insert id="insertSymbols">
+    insert into t_cmc_symbol (name, symbol, website_slug)
+    values
+    <foreach collection="symbols" item="item" separator=",">
+      (#{item.name}, #{item.symbol}, #{item.websiteSlug})
+    </foreach>
+  </insert>
+  <insert id="insertSelective">
     insert into t_cmc_symbol
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="name != null">
@@ -68,5 +86,8 @@
       symbol = #{symbol,jdbcType=VARCHAR},
       website_slug = #{websiteSlug,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="truncate">
+    TRUNCATE TABLE t_cmc_symbol
   </update>
 </mapper>
