@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.weber.okex.ticker.client.coinmarketcap.domain.CmcSymbolWarpper;
+import com.weber.okex.ticker.client.coinmarketcap.domain.CmcTickerWarpper;
 import com.weber.okex.ticker.client.domain.OkexDepthWarpper;
 import com.weber.okex.ticker.client.domain.OkexTickerWarpper;
 import retrofit2.Call;
@@ -20,13 +21,15 @@ public interface CmcApiService {
   Call<CmcSymbolWarpper> listings();
 
   /**
-   * 获取OKEx币币行情
+   * 获取行情
    *
-   * @param symbol
+   * @param start
+   * @param limit
    * @return
    */
   @GET("/v2/ticker/")
-  Call<OkexTickerWarpper> ticker(@Query("symbol") String symbol);
+  Call<CmcTickerWarpper> ticker(@Query("start") Integer start, @Query("limit") Integer limit,
+      @Query("sort") String sort);
 
   /**
    * 获取OKEx币币交易信息(600条)
