@@ -17,6 +17,10 @@ public class BuyTradesCache {
     map.put(symbol, collection);
   }
 
+  public static void del(String symbol) {
+    map.remove(symbol);
+  }
+
   public static Collection<OkexTrade> get(String symbol) {
     return map.get(symbol);
   }

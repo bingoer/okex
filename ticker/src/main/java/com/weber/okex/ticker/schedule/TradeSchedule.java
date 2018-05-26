@@ -49,6 +49,9 @@ public class TradeSchedule {
   @Value("${okex.threshold.buys-rate}")
   private double buysRate;
 
+  @Value("${okex.threshold.distance-now}")
+  private int distanceNow;
+
   private List<String> mayjorSymbols = symbols;
 
   @Autowired private OkexClient okexClient;
@@ -91,7 +94,12 @@ public class TradeSchedule {
             Integer size = trades.size();
             List<OkexTrade> buys = trades.stream().filter(trade-> "buy".equals(trade.getType())).collect(toList());
             if (buys.size()/size * 1.0 > buysRate) {
+              log.info(symbol + " take占比大于:{}", buysRate);
               BuyTradesCache.add(symbol, trades);
+            }
+            if (System.currentTimeMillis() - trades.get(0).getDateMs() > distanceNow) {
+              log.info(symbol + " time:" + trades.get(0).getDateMs() + "," + System.currentTimeMillis());
+              BuyTradesCache.del(symbol);
             }
           } catch (IOException e) {
             e.printStackTrace();
