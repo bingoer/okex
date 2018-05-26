@@ -99,7 +99,7 @@ public class StockRestApi implements IStockRestApi {
 	}
 
 	@Override
-	public String depth(String symbol) throws HttpException, IOException {
+	public String depth(String symbol, String size) throws HttpException, IOException {
 		HttpUtilManager httpUtil = HttpUtilManager.getInstance();
 		String param = "";
 		if(!StringUtil.isEmpty(symbol )) {
@@ -107,6 +107,12 @@ public class StockRestApi implements IStockRestApi {
 				param += "&";
 			}
 			param += "symbol=" + symbol;
+		}
+		if(!StringUtil.isEmpty(size)) {
+			if(!param.equals("")) {
+				param += "&";
+			}
+			param += "size=" + size;
 		}
 		String result = httpUtil.requestHttpGet(url_prex, this.DEPTH_URL, param);
 	    return result;

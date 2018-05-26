@@ -1,6 +1,8 @@
 package com.weber.okex.ticker.client;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.weber.okex.ticker.client.domain.OkexDepthWarpper;
@@ -12,6 +14,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static java.util.stream.Collectors.toList;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -53,10 +57,37 @@ public class OkexRestClientTests {
             });
   }
 
+  public static void main(String[] args){
+    List<Integer> list = new ArrayList<>();
+    list.add(1);
+    list.add(2);
+    list.add(3);
+    list.add(4);
+    list.add(5);
+    Iterator<Integer> iter = list.iterator();
+    while (iter.hasNext()) {
+      if(iter.next() % 2 == 0) {
+        iter.remove();
+      }
+    }
+    System.out.println(list);
+  }
+
   @Test
   public void trades(){
     List<OkexTrade> list = okexRestClient.trades("okb_usdt", null);
     System.out.println(list);
+    System.out.println("list.size()=" + list.size());
+    List<OkexTrade> list2 = list.stream().filter(trade-> "buy".equals(trade.getType())).collect(toList());
+    System.out.println("list2.size()=" + list2.size());
+    Iterator<OkexTrade> iter = list.iterator();
+    while (iter.hasNext()) {
+      if("sell".equals(iter.next().getType())) {
+        iter.remove();
+      }
+    }
+    System.out.println("buy list.size()=" + list.size());
+
   }
 
   @Test

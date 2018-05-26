@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class PriceStrategy1MinTest {
 
-  @Value("#{'${okex.symbols}'.split(',')}")
+  @Value("#{'${okex.symbols.usdt}'.split(',')}")
   private List<String> symbols;
   @Value("${okex.test.period.type}")
   private String periodType;

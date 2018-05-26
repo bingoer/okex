@@ -18,7 +18,7 @@ import java.util.List;
 @SpringBootTest
 public class VolStrategy15MinTest {
 
-  @Value("#{'${okex.symbols}'.split(',')}")
+  @Value("#{'${okex.symbols.usdt}'.split(',')}")
   private List<String> symbols;
   @Value("${okex.test.period.15min}")
   private String periodType;

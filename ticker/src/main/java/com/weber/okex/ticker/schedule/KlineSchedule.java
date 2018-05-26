@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 public class KlineSchedule {
   private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-  @Value("#{'${okex.symbols}'.split(',')}")
+  @Value("#{'${okex.symbols.usdt}'.split(',')}")
   private List<String> symbols;
 
   @Value("#{'${okex.period.types}'.split(',')}")
@@ -65,7 +65,7 @@ public class KlineSchedule {
   @Autowired
   private PriceStrategy15Min<KlineResult> priceStrategy15Min;
 
-  @PostConstruct
+//  @PostConstruct
   private void init(){
     List<String> tempMayjorSymbols = new ArrayList<>();
     symbols.forEach(
@@ -115,7 +115,7 @@ public class KlineSchedule {
   }
 
 
-  @Scheduled(fixedRate = 1000)
+//  @Scheduled(fixedRate = 1000)
   public void analyse15Min() {
     mayjorSymbols.forEach(
         symbol -> {

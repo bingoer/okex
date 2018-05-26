@@ -35,7 +35,7 @@ public class OkexClientTest {
 
   @Test
   public void depth() throws IOException, HttpException {
-    System.out.println(okexClient.depth(symbol));
+    System.out.println(okexClient.depth(symbol, null));
   }
 
   @Test

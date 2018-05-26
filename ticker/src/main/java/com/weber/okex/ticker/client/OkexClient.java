@@ -12,10 +12,13 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.weber.okex.ticker.client.domain.OkexAccountBalance;
 import com.weber.okex.ticker.client.domain.OkexAccountBalanceWarpper;
+import com.weber.okex.ticker.client.domain.OkexDepthWarpper;
 import com.weber.okex.ticker.client.domain.OkexKline;
 import com.weber.okex.ticker.client.domain.OkexTickerWarpper;
+import com.weber.okex.ticker.client.domain.OkexTrade;
 import com.weber.okex.ticker.okexclient.rest.stock.IStockRestApi;
 import com.weber.okex.ticker.okexclient.rest.stock.impl.StockRestApi;
 import lombok.extern.slf4j.Slf4j;
@@ -74,8 +77,10 @@ public class OkexClient {
    * @throws IOException
    * @throws HttpException
    */
-  public String depth(String symbol) throws IOException, HttpException {
-    return stockGet.depth(symbol);
+  public OkexDepthWarpper depth(String symbol, String size) throws IOException, HttpException {
+    String resultStr = stockGet.depth(symbol, size);
+    OkexDepthWarpper depth = JSON.parseObject(resultStr, OkexDepthWarpper.class);
+    return depth;
   }
 
   /**
@@ -86,8 +91,10 @@ public class OkexClient {
    * @throws IOException
    * @throws HttpException
    */
-  public String trades(String symbol, String since) throws IOException, HttpException {
-    return stockGet.trades(symbol, since);
+  public List<OkexTrade> trades(String symbol, String since) throws IOException, HttpException {
+    String resultStr = stockGet.trades(symbol, since);
+    List<OkexTrade> list = JSON.parseObject(resultStr, new TypeReference<List<OkexTrade>>(){});
+    return list;
   }
 
   /**

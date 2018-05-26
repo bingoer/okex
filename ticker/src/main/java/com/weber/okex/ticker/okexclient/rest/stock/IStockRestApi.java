@@ -29,7 +29,7 @@ public interface IStockRestApi {
    * @throws IOException
    * @throws HttpException
    */
-  public String depth(String symbol) throws HttpException, IOException;
+  public String depth(String symbol, String size) throws HttpException, IOException;
 
   /**
    * 现货历史交易信息

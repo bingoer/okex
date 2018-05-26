@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class StrategyServiceImpl implements StrategyService {
 
-  @Value("${okex.symbol.vol}")
-  private BigDecimal symbolVol;
+  @Value("${okex.threshold.vol}")
+  private BigDecimal thresholdVol;
 
   @Value("${okex.kline.size}")
   private Integer klineSize;
@@ -25,7 +25,7 @@ public class StrategyServiceImpl implements StrategyService {
   @Override
   public TickerResult analyseTicker(OkexTickerWarpper tickerWarpper) {
     OkexTicker ticker = tickerWarpper.getTicker();
-    if (ticker.getLast().multiply(ticker.getVol()).compareTo(symbolVol) > 0) {
+    if (ticker.getLast().multiply(ticker.getVol()).compareTo(thresholdVol) > 0) {
       return TickerResult.buildSuccess();
     }
 
