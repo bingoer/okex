@@ -46,7 +46,7 @@ public class CmcRestClientTest {
         log.error("get cmc tricker has error.", e);
       }
       start += limit;
-      Thread.sleep(2200);
+      Thread.sleep(20000);
     }
   }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.weber.okex.ticker.client.domain.OkexDepthWarpper;
 import com.weber.okex.ticker.client.domain.OkexTickerWarpper;
+import com.weber.okex.ticker.client.domain.OkexTrade;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -27,6 +28,15 @@ public interface OkexApiService {
   @GET("/api/v1/ticker.do")
   Call<OkexTickerWarpper> ticker(@Query("symbol") String symbol);
 
+/**
+   * 获取OKEx币币行情
+   *
+   * @param symbol
+   * @return
+   */
+  @GET("/api/v1/depth.do")
+  Call<OkexDepthWarpper> depth(@Query("symbol") String symbol, @Query("size") Integer size);
+
   /**
    * 获取OKEx币币交易信息(600条)
    *
@@ -35,7 +45,7 @@ public interface OkexApiService {
    * @return
    */
   @GET("/api/v1/trades.do")
-  Call<OkexDepthWarpper> trades(@Query("symbol") String symbol, @Query("since") Long since);
+  Call<List<OkexTrade>> trades(@Query("symbol") String symbol, @Query("since") Long since);
 
   /**
    * 获取OKEx币币K线数据(每个周期数据条数2000左右)

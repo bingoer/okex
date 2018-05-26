@@ -1,20 +1,16 @@
 package com.weber.okex.ticker.client;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 
 import com.weber.okex.ticker.client.domain.OkexKline;
 import com.weber.okex.ticker.client.domain.OkexTickerWarpper;
-import com.weber.okex.ticker.client.impl.OkexOkexRestClientImpl;
 import org.apache.http.HttpException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)

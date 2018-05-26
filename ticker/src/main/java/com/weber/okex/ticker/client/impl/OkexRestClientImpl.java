@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.weber.okex.ticker.client.OkexRestClient;
+import com.weber.okex.ticker.client.domain.OkexDepthWarpper;
 import com.weber.okex.ticker.client.domain.OkexTickerWarpper;
+import com.weber.okex.ticker.client.domain.OkexTrade;
 
 import static com.weber.okex.ticker.client.impl.OkexApiServiceGenerator.createService;
 import static com.weber.okex.ticker.client.impl.OkexApiServiceGenerator.executeSync;
@@ -12,11 +14,11 @@ import static com.weber.okex.ticker.client.impl.OkexApiServiceGenerator.executeS
 /**
  * Implementation of REST API using Retrofit with synchronous/blocking method calls.
  */
-public class OkexOkexRestClientImpl implements OkexRestClient {
+public class OkexRestClientImpl implements OkexRestClient {
 
   private final OkexApiService okexApiService;
 
-  public OkexOkexRestClientImpl(String apiKey, String secret) {
+  public OkexRestClientImpl(String apiKey, String secret) {
     okexApiService = createService(OkexApiService.class, apiKey, secret);
   }
 
@@ -30,6 +32,16 @@ public class OkexOkexRestClientImpl implements OkexRestClient {
   @Override
   public OkexTickerWarpper ticker(String symbol) {
     return executeSync(okexApiService.ticker(symbol));
+  }
+
+  @Override
+  public OkexDepthWarpper depth(String symbol, Integer size) {
+    return executeSync(okexApiService.depth(symbol, size));
+  }
+
+  @Override
+  public List<OkexTrade> trades(String symbol, Long since) {
+    return executeSync(okexApiService.trades(symbol, since));
   }
 
   @Override

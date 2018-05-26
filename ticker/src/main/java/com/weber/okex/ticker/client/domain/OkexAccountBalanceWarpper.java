@@ -1,21 +1,18 @@
 package com.weber.okex.ticker.client.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
-@ToString
+@Data
 public class OkexAccountBalanceWarpper {
 
   private Boolean result;
 
   private Info info;
 
-  @Getter
-  @Setter
-  @ToString
+  @Data
   public static class Info {
     private OkexAccountBalance funds;
   }

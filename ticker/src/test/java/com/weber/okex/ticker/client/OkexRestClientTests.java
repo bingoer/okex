@@ -1,10 +1,11 @@
-package com.weber.okex.ticker;
+package com.weber.okex.ticker.client;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.weber.okex.ticker.client.OkexRestClient;
+import com.weber.okex.ticker.client.domain.OkexDepthWarpper;
 import com.weber.okex.ticker.client.domain.OkexTickerWarpper;
+import com.weber.okex.ticker.client.domain.OkexTrade;
 import com.weber.okex.ticker.client.impl.OkexRestClientImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TickerApplicationTests {
+public class OkexRestClientTests {
 
   @Value("${okex.apikey}")
   private String apiKey;
@@ -33,6 +34,29 @@ public class TickerApplicationTests {
   public void ticker(){
     OkexTickerWarpper okexTickerWarpper = okexRestClient.ticker("okb_usdt");
     System.out.println(okexTickerWarpper);
+  }
+
+  @Test
+  public void depth(){
+    OkexDepthWarpper okexDepthWarpper = okexRestClient.depth("okb_usdt", 2);
+    okexDepthWarpper
+        .getAsks()
+        .forEach(
+            ask -> {
+              System.out.println(ask[0] + "," + ask[1]);
+            });
+    okexDepthWarpper
+        .getBids()
+        .forEach(
+            bids -> {
+              System.out.println(bids[0] + "," + bids[1]);
+            });
+  }
+
+  @Test
+  public void trades(){
+    List<OkexTrade> list = okexRestClient.trades("okb_usdt", null);
+    System.out.println(list);
   }
 
   @Test
