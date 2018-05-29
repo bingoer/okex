@@ -34,10 +34,10 @@ public class OkexClient {
   @Value("${okex.base.url}")
   private String urlPrex;
 
-  @Value("${okex.apikey}")
+  @Value("${api.okex.apikey}")
   private String apiKey;
 
-  @Value("${okex.secretkey}")
+  @Value("${api.okex.secretkey}")
   private String secretKey;
 
   /** get请求无需发送身份认证,通常用于获取行情，市场深度等公共信息 */

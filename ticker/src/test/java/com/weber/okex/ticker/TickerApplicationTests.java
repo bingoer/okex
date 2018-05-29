@@ -16,10 +16,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class TickerApplicationTests {
 
-  @Value("${okex.apikey}")
+  @Value("${api.okex.apikey}")
   private String apiKey;
 
-  @Value("${okex.secretkey}")
+  @Value("${api.okex.secretkey}")
   private String secretKey;
 
   private OkexRestClient okexRestClient = new OkexRestClientImpl(null, null);

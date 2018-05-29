@@ -96,11 +96,13 @@ public class TradeSchedule {
             if (buys.size()/size * 1.0 > buysRate) {
               log.info(symbol + " take占比大于:{}", buysRate);
               BuyTradesCache.add(symbol, trades);
+
+              if (System.currentTimeMillis() - trades.get(0).getDateMs() > distanceNow) {
+                log.info(symbol + " time:" + trades.get(0).getDateMs() + "," + System.currentTimeMillis());
+                BuyTradesCache.del(symbol);
+              }
             }
-            if (System.currentTimeMillis() - trades.get(0).getDateMs() > distanceNow) {
-              log.info(symbol + " time:" + trades.get(0).getDateMs() + "," + System.currentTimeMillis());
-              BuyTradesCache.del(symbol);
-            }
+
           } catch (IOException e) {
             e.printStackTrace();
           } catch (HttpException e) {

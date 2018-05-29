@@ -21,10 +21,10 @@ import static java.util.stream.Collectors.toList;
 @SpringBootTest
 public class OkexRestClientTests {
 
-  @Value("${okex.apikey}")
+  @Value("${api.okex.apikey}")
   private String apiKey;
 
-  @Value("${okex.secretkey}")
+  @Value("${api.okex.secretkey}")
   private String secretKey;
 
   private OkexRestClient okexRestClient = new OkexRestClientImpl(null, null);
