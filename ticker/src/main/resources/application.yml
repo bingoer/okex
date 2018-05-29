@@ -1,0 +1,61 @@
+server:
+  port: 8088
+
+# jdbc_config   datasource
+spring:
+  profiles:
+    active: key
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/trading?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: 18510917075
+# Hikari will use the above plus the following to setup connection pooling
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: DatebookHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.weber.okex.ticker.model
+
+
+okex:
+  base:
+    url: https://www.okex.com
+  period:
+    types: 1min,3min,5min,15min,30min,1day,3day,1week,1hour,2hour,4hour,6hour,12hour
+  symbols:
+    usdt: ltc_usdt,eth_usdt,okb_usdt,etc_usdt,bch_usdt,1st_usdt,aac_usdt,abt_usdt,ace_usdt,act_usdt,aidoc_usdt,amm_usdt,ark_usdt,ast_usdt,auto_usdt,avt_usdt,bcd_usdt,bec_usdt,bkx_usdt,bnt_usdt,btg_usdt,btm_usdt,can_usdt,cbt_usdt,chat_usdt,cic_usdt,cmt_usdt,ctxc_usdt,cvc_usdt,dadi_usdt,dash_usdt,dent_usdt,dgb_usdt,dgd_usdt,dna_usdt,dnt_usdt,dpy_usdt,edo_usdt,elf_usdt,eng_usdt,enj_usdt,eos_usdt,evx_usdt,fun_usdt,gas_usdt,gnt_usdt,gnx_usdt,gtc_usdt,hot_usdt,hsr_usdt,icn_usdt,icx_usdt,ins_usdt,insur_usdt,int_usdt,iost_usdt,iota_usdt,ipc_usdt,itc_usdt,kcash_usdt,knc_usdt,light_usdt,link_usdt,lrc_usdt,mana_usdt,mco_usdt,mda_usdt,mdt_usdt,mith_usdt,mkr_usdt,mof_usdt,mth_usdt,mtl_usdt,nano_usdt,nas_usdt,neo_usdt,nuls_usdt,oax_usdt,of_usdt,omg_usdt,ont_usdt,ost_usdt,pay_usdt,poe_usdt,ppt_usdt,pra_usdt,pst_usdt,qtum_usdt,qun_usdt,r_usdt,rcn_usdt,rdn_usdt,ren_usdt,rfr_usdt,rnt_usdt,salt_usdt,san_usdt,snc_usdt,sngls_usdt,snt_usdt,spf_usdt,ssc_usdt,storj_usdt,sub_usdt,swftc_usdt,theta_usdt,tio_usdt,tnb_usdt,topc_usdt,tra_usdt,trio_usdt,true_usdt,trx_usdt,uct_usdt,ugc_usdt,vee_usdt,vib_usdt,wtc_usdt,xem_usdt,xlm_usdt,xmr_usdt,xrp_usdt,xuc_usdt,yee_usdt,yoyo_usdt,zec_usdt,zen_usdt,zil_usdt,zip_usdt,zrx_usdt
+    btc: ltc_btc,eth_btc,okb_btc,etc_btc,bch_btc,1st_btc,aac_btc,abt_btc,ace_btc,act_btc,aidoc_btc,amm_btc,ark_btc,ast_btc,auto_btc,avt_btc,bcd_btc,bec_btc,bkx_btc,bnt_btc,btg_btc,btm_btc,can_btc,cbt_btc,chat_btc,cic_btc,cmt_btc,ctxc_btc,cvc_btc,dadi_btc,dash_btc,dent_btc,dgb_btc,dgd_btc,dna_btc,dnt_btc,dpy_btc,edo_btc,elf_btc,eng_btc,enj_btc,eos_btc,evx_btc,fun_btc,gas_btc,gnt_btc,gnx_btc,gtc_btc,hot_btc,hsr_btc,icn_btc,icx_btc,ins_btc,insur_btc,int_btc,iost_btc,iota_btc,ipc_btc,itc_btc,kcash_btc,knc_btc,light_btc,link_btc,lrc_btc,mana_btc,mco_btc,mda_btc,mdt_btc,mith_btc,mkr_btc,mof_btc,mth_btc,mtl_btc,nano_btc,nas_btc,neo_btc,nuls_btc,oax_btc,of_btc,omg_btc,ont_btc,ost_btc,pay_btc,poe_btc,ppt_btc,pra_btc,pst_btc,qtum_btc,qun_btc,r_btc,rcn_btc,rdn_btc,ren_btc,rfr_btc,rnt_btc,salt_btc,san_btc,sbtc_btc,snc_btc,sngls_btc,snt_btc,spf_btc,ssc_btc,storj_btc,sub_btc,swftc_btc,theta_btc,tio_btc,tnb_btc,topc_btc,tra_btc,trio_btc,true_btc,trx_btc,uct_btc,ugc_btc,vee_btc,vib_btc,wbtc_btc,wtc_btc,xem_btc,xlm_btc,xmr_btc,xrp_btc,xuc_btc,yee_btc,yoyo_btc,zec_btc,zen_btc,zil_btc,zip_btc,zrx_btc
+  kline:
+    size: 5
+    strategy:
+      times1: 1
+      times2: 2
+      times3: 3
+      times4: 4
+      times5: 5
+      times6: 6
+      times7: 7
+      times8: 8
+      times9: 9
+      times10: 10
+  threshold:
+    vol: 1000000
+    buys-rate: 0.65
+    distance-now: 60000
+  test:
+    symbol: okb_btc
+    period:
+      type: 1min
+
+
+
