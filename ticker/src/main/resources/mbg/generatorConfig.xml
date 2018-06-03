@@ -42,7 +42,7 @@
 		<!-- 生成Mapper -->
 		<javaClientGenerator targetPackage="${targetMapperPackage}"
 			targetProject="${targetJavaProject}" type="XMLMAPPER" />
-
+	<!--
 		<table tableName="t_cmc_symbol" domainObjectName="CmcSymbol"
 			enableInsert="true"
 			enableSelectByPrimaryKey="true"
@@ -56,5 +56,21 @@
 			selectByExampleQueryId="false">
 			<generatedKey column="id" sqlStatement="JDBC" identity="true" />
 		</table>
+
+		<table tableName="t_ticker" domainObjectName="Ticker"
+			enableInsert="true"
+			enableSelectByPrimaryKey="true"
+			enableUpdateByPrimaryKey="true"
+			enableSelectByExample="false"
+			enableDeleteByPrimaryKey="false"
+			enableDeleteByExample="false"
+			enableCountByExample="false"
+			enableUpdateByExample="false"
+			selectByPrimaryKeyQueryId="false"
+			selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="JDBC" identity="true" />
+		</table>
+
+		-->
 	</context>
 </generatorConfiguration>

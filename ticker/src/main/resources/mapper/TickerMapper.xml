@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weber.okex.ticker.repository.TickerMapper">
+  <resultMap id="BaseResultMap" type="com.weber.okex.ticker.model.Ticker">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="symbol" jdbcType="VARCHAR" property="symbol" />
+    <result column="buy" jdbcType="DECIMAL" property="buy" />
+    <result column="high" jdbcType="DECIMAL" property="high" />
+    <result column="last" jdbcType="DECIMAL" property="last" />
+    <result column="low" jdbcType="DECIMAL" property="low" />
+    <result column="sell" jdbcType="DECIMAL" property="sell" />
+    <result column="vol" jdbcType="DECIMAL" property="vol" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, symbol, buy, high, last, low, sell, vol, amount, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_ticker
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByCondition" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_ticker
+    where 1=1
+    <if test="amount != null">
+      and <![CDATA[ amount > #{amount} ]]>
+    </if>
+    order by amount desc
+  </select>
+  <insert id="replace" keyColumn="id" keyProperty="id" parameterType="com.weber.okex.ticker.model.Ticker" useGeneratedKeys="true">
+    replace into t_ticker (symbol, buy, high,
+      last, low, sell, vol, amount,
+      create_time, update_time)
+    values (#{symbol,jdbcType=VARCHAR}, #{buy,jdbcType=DECIMAL}, #{high,jdbcType=DECIMAL}, 
+      #{last,jdbcType=DECIMAL}, #{low,jdbcType=DECIMAL}, #{sell,jdbcType=DECIMAL}, #{vol,jdbcType=DECIMAL},
+      #{amount,jdbcType=DECIMAL},
+      CURRENT_TIMESTAMP() , #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.weber.okex.ticker.model.Ticker" useGeneratedKeys="true">
+    insert into t_ticker
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="symbol != null">
+        symbol,
+      </if>
+      <if test="buy != null">
+        buy,
+      </if>
+      <if test="high != null">
+        high,
+      </if>
+      <if test="last != null">
+        last,
+      </if>
+      <if test="low != null">
+        low,
+      </if>
+      <if test="sell != null">
+        sell,
+      </if>
+      <if test="vol != null">
+        vol,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="symbol != null">
+        #{symbol,jdbcType=VARCHAR},
+      </if>
+      <if test="buy != null">
+        #{buy,jdbcType=DECIMAL},
+      </if>
+      <if test="high != null">
+        #{high,jdbcType=DECIMAL},
+      </if>
+      <if test="last != null">
+        #{last,jdbcType=DECIMAL},
+      </if>
+      <if test="low != null">
+        #{low,jdbcType=DECIMAL},
+      </if>
+      <if test="sell != null">
+        #{sell,jdbcType=DECIMAL},
+      </if>
+      <if test="vol != null">
+        #{vol,jdbcType=DECIMAL},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.weber.okex.ticker.model.Ticker">
+    update t_ticker
+    <set>
+      <if test="symbol != null">
+        symbol = #{symbol,jdbcType=VARCHAR},
+      </if>
+      <if test="buy != null">
+        buy = #{buy,jdbcType=DECIMAL},
+      </if>
+      <if test="high != null">
+        high = #{high,jdbcType=DECIMAL},
+      </if>
+      <if test="last != null">
+        last = #{last,jdbcType=DECIMAL},
+      </if>
+      <if test="low != null">
+        low = #{low,jdbcType=DECIMAL},
+      </if>
+      <if test="sell != null">
+        sell = #{sell,jdbcType=DECIMAL},
+      </if>
+      <if test="vol != null">
+        vol = #{vol,jdbcType=DECIMAL},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.weber.okex.ticker.model.Ticker">
+    update t_ticker
+    set symbol = #{symbol,jdbcType=VARCHAR},
+      buy = #{buy,jdbcType=DECIMAL},
+      high = #{high,jdbcType=DECIMAL},
+      last = #{last,jdbcType=DECIMAL},
+      low = #{low,jdbcType=DECIMAL},
+      sell = #{sell,jdbcType=DECIMAL},
+      vol = #{vol,jdbcType=DECIMAL},
+      amount = #{amount,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

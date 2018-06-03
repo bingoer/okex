@@ -4,25 +4,18 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import com.weber.okex.ticker.cache.BuyTradesCache;
 import com.weber.okex.ticker.client.OkexClient;
-import com.weber.okex.ticker.client.domain.OkexKline;
 import com.weber.okex.ticker.client.domain.OkexTickerWarpper;
 import com.weber.okex.ticker.client.domain.OkexTrade;
-import com.weber.okex.ticker.data.KlineResult;
 import com.weber.okex.ticker.data.TickerResult;
+import com.weber.okex.ticker.model.Ticker;
 import com.weber.okex.ticker.service.StrategyService;
-import com.weber.okex.ticker.strategy.PriceStrategy15Min;
-import com.weber.okex.ticker.strategy.PriceStrategy1Min;
-import com.weber.okex.ticker.strategy.PriceStrategy3Min;
-import com.weber.okex.ticker.strategy.VolStrategy15Min;
-import com.weber.okex.ticker.strategy.VolStrategy1Min;
-import com.weber.okex.ticker.strategy.VolStrategy3Min;
+import com.weber.okex.ticker.service.TickerService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,16 +49,18 @@ public class TradeSchedule {
 
   @Autowired private OkexClient okexClient;
 
-  @Autowired
-  private StrategyService strategyService;
+  @Autowired private StrategyService strategyService;
+
+  @Autowired private TickerService tickerService;
 
   @PostConstruct
-  private void init(){
+  private void init() {
     List<String> tempMayjorSymbols = new ArrayList<>();
     symbols.forEach(
         symbol -> {
           try {
             OkexTickerWarpper tickerWarpper = okexClient.ticker(symbol);
+            tickerService.saveOrUpdate(new Ticker(tickerWarpper));
             TickerResult tickerResult = strategyService.analyseTicker(tickerWarpper);
             if (tickerResult.isSuccess()) {
               tickerResult.setSymbol(symbol);
@@ -90,15 +85,21 @@ public class TradeSchedule {
     mayjorSymbols.forEach(
         symbol -> {
           try {
-            List<OkexTrade> trades = okexClient.trades(symbol,  null);
+            List<OkexTrade> trades = okexClient.trades(symbol, null);
             Integer size = trades.size();
-            List<OkexTrade> buys = trades.stream().filter(trade-> "buy".equals(trade.getType())).collect(toList());
-            if (buys.size()/size * 1.0 > buysRate) {
+            List<OkexTrade> buys =
+                trades.stream().filter(trade -> "buy".equals(trade.getType())).collect(toList());
+            if (buys.size() / size * 1.0 > buysRate) {
               log.info(symbol + " take占比大于:{}", buysRate);
               BuyTradesCache.add(symbol, trades);
 
               if (System.currentTimeMillis() - trades.get(0).getDateMs() > distanceNow) {
-                log.info(symbol + " time:" + trades.get(0).getDateMs() + "," + System.currentTimeMillis());
+                log.info(
+                    symbol
+                        + " time:"
+                        + trades.get(0).getDateMs()
+                        + ","
+                        + System.currentTimeMillis());
                 BuyTradesCache.del(symbol);
               }
             }
