@@ -53,7 +53,7 @@ public class TradeSchedule {
 
   @Autowired private TickerService tickerService;
 
-  @PostConstruct
+//  @PostConstruct
   private void init() {
     List<String> tempMayjorSymbols = new ArrayList<>();
     symbols.forEach(
@@ -79,7 +79,7 @@ public class TradeSchedule {
     log.info("mayjorSymbols=" + mayjorSymbols);
   }
 
-  @Scheduled(fixedRate = 1000)
+//  @Scheduled(fixedRate = 1000)
   public void analyseTrades() {
     BuyTradesCache.clearAll();
     mayjorSymbols.forEach(

@@ -39,7 +39,7 @@ public class StockClient {
 	    stockGet.ticker("btc_usd");
 
             //现货市场深度
-            stockGet.depth("btc_usd");
+            stockGet.depth("btc_usd", null);
 		
             //现货OKCoin历史交易信息
             stockGet.trades("btc_usd", "20");
