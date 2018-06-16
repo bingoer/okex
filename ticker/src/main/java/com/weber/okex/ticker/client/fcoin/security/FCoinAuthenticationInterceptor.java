@@ -6,11 +6,10 @@ import java.util.Objects;
 
 import com.weber.okex.ticker.client.fcoin.constants.FCoinApiConstants;
 import com.weber.okex.ticker.client.fcoin.util.FCoinSignUtil;
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
-import okio.Buffer;
 
 /**
  * A request interceptor that injects the API Key Header into requests, and signs messages, whenever
@@ -47,32 +46,21 @@ public class FCoinAuthenticationInterceptor implements Interceptor {
         .removeHeader(FCoinApiConstants.API_TIMESTAMP_HEADER);
 
       newRequestBuilder.addHeader(FCoinApiConstants.API_KEY_HEADER, apiKey);
-      newRequestBuilder.addHeader(FCoinApiConstants.API_SIGNATURE_HEADER, FCoinSignUtil.sign(method, url, timestamp, params, apiKey));
+      newRequestBuilder.addHeader(FCoinApiConstants.API_SIGNATURE_HEADER, FCoinSignUtil.sign(method, url, timestamp, params, secret));
       newRequestBuilder.addHeader(FCoinApiConstants.API_TIMESTAMP_HEADER, timestamp);
+
+    // Endpoint requires signing the payload
+    if ("GET".equals(method) && !params.isEmpty()) {
+      HttpUrl.Builder urlBuilder = original.url().newBuilder();
+      for (Object key : params.keySet()) {
+        urlBuilder.addQueryParameter((String) key,  (String)params.get(key));
+      }
+      newRequestBuilder.url(urlBuilder.build());
+    }
 
     // Build new request after adding the necessary authentication information
     Request newRequest = newRequestBuilder.build();
     return chain.proceed(newRequest);
-  }
-
-  /**
-   * Extracts the request body into a String.
-   *
-   * @return request body as a string
-   */
-  @SuppressWarnings("unused")
-  private static String bodyToString(RequestBody request) {
-    try (final Buffer buffer = new Buffer()) {
-      final RequestBody copy = request;
-      if (copy != null) {
-        copy.writeTo(buffer);
-      } else {
-        return "";
-      }
-      return buffer.readUtf8();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
   }
 
   @Override

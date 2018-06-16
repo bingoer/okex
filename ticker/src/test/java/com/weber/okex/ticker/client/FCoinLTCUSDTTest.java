@@ -2,11 +2,8 @@ package com.weber.okex.ticker.client;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.weber.okex.ticker.client.fcoin.FCoinRestClient;
@@ -26,59 +23,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 @Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class FCoinRestClientTest {
+public class FCoinLTCUSDTTest {
 
-  private static final String SYMBOL = "ftusdt";
-  private static final String AMOUNT = "50";
-  private static final String SELL_PRICE = "14.54";
-  private static final String BUY_PRICE = "14.53";
+  private static final String SYMBOL = "etcusdt";
+  private static final String AMOUNT = "5";
+  private static final String SELL_PRICE = "97.63";
+  private static final String BUY_PRICE = "97.62";
 
   @Autowired private FCoinRestClient fCoinRestClient;
-
-  @Test
-  public void currencies() {
-    Collection<String> currencies = fCoinRestClient.currencies();
-    System.out.println(currencies);
-  }
-
-  @Test
-  public void symboles() {
-    Collection<FCoinSymbol> symboles = fCoinRestClient.symboles();
-    System.out.println(symboles);
-  }
-
-  @Test
-  public void ticker() {
-    FCoinTickerWarpper fCoinTickerWarpper = fCoinRestClient.ticker(SYMBOL);
-    System.out.println(fCoinTickerWarpper);
-    System.out.println(fCoinTickerWarpper.buildTicker());
-  }
-
-  @Test
-  public void createBuyOrder() {
-    String buyOrderId = fCoinRestClient.createOrder(getBuyParams());
-    System.out.println(buyOrderId);
-  }
-
-  @Test
-  public void orders() {
-    LinkedHashMap<String, String> params = new LinkedHashMap<>();
-    params.put("states", "submitted");
-    params.put("symbol", SYMBOL);
-    try {
-      Collection<FCoinOrderWarpper> orders = fCoinRestClient.orders(params);
-      System.out.println(orders);
-    } catch (FCoinApiException e) {
-      e.printStackTrace();
-    }
-  }
-
-//  @Test
-  public void cancelOrder() {
-    Boolean cancelResult =
-        fCoinRestClient.cancelOrder("ULETEknxlMjwtB_iIYBe5IzfJ-19AQ_58abdNsl8XO4=");
-    System.out.println(cancelResult);
-  }
 
   @Test
   public void createOrder() {
@@ -88,7 +40,8 @@ public class FCoinRestClientTest {
         while (orders == null) {
           orders = getOrders();
         }
-        orders = orders.stream().filter(order->order.getSymbol().equals(SYMBOL)).collect(Collectors.toList());
+        orders = orders.stream().filter(order->order.getSymbol().equals(SYMBOL)).collect(Collectors
+            .toList());
         while (orders.size() >= 2) {
           orders.forEach(order->{
             if (System.currentTimeMillis() - Long.valueOf(order.getCreatedAt()) > 180 * 1000) {
@@ -104,20 +57,21 @@ public class FCoinRestClientTest {
           }
           orders = orders.stream().filter(order->order.getSymbol().equals(SYMBOL)).collect(Collectors.toList());
         }
-        Thread.sleep(500);
+        Thread.sleep(200);
 
 
         FCoinTickerWarpper fCoinTickerWarpper = fCoinRestClient.ticker(SYMBOL);
         FCoinTicker ticker = fCoinTickerWarpper.buildTicker();
         BigDecimal sellPrice = ticker.getSell();
         BigDecimal buyPrice = ticker.getBuy();
-        BigDecimal middlePrice = sellPrice.add(buyPrice).divide(new BigDecimal("2"), sellPrice.stripTrailingZeros().scale(), RoundingMode.DOWN);
+        BigDecimal middlePrice = sellPrice.add(buyPrice).divide(new BigDecimal("2"),
+            sellPrice.stripTrailingZeros().scale(), RoundingMode.DOWN);
         String sellOrderId = fCoinRestClient.createOrder(getSellParams(middlePrice));
         System.out.println(sellOrderId);
-        Thread.sleep(500);
-        String buyOrderId = fCoinRestClient.createOrder(getBuyParams(buyPrice));
+        Thread.sleep(200);
+        String buyOrderId = fCoinRestClient.createOrder(getBuyParams(middlePrice));
         System.out.println(buyOrderId);
-        Thread.sleep(500);
+        Thread.sleep(200);
       } catch (FCoinApiException e) {
         e.printStackTrace();
         if (e.getMessage().contains("account balance insufficient")) {
@@ -166,8 +120,7 @@ public class FCoinRestClientTest {
   }
 
   private LinkedHashMap<String, String> getSellParams(BigDecimal price) {
-    String sellAmount = new BigDecimal(AMOUNT).multiply(new BigDecimal("0.998")).stripTrailingZeros().toPlainString();
-    return getParams(sellAmount, price.stripTrailingZeros().toPlainString(), "sell", SYMBOL, "limit");
+    return getParams(AMOUNT, price.stripTrailingZeros().toPlainString(), "sell", SYMBOL, "limit");
   }
 
   private LinkedHashMap<String, String> getBuyParams() {

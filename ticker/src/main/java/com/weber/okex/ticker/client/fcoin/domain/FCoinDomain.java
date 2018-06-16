@@ -8,5 +8,7 @@ import lombok.Data;
 public class FCoinDomain<T> {
   private int status;
 
+  private String msg;
+
   private T data;
 }

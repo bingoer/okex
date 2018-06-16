@@ -3,6 +3,7 @@ package com.weber.okex.ticker.client.fcoin.impl;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.weber.okex.ticker.client.fcoin.constants.FCoinApiConstants;
 import com.weber.okex.ticker.client.fcoin.domain.FCoinApiError;
@@ -20,7 +21,10 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
  */
 public class FCoinApiServiceGenerator {
 
-    static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+    static OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
+        .connectTimeout(5, TimeUnit.SECONDS)
+        .readTimeout(5, TimeUnit.SECONDS)
+        .writeTimeout(5, TimeUnit.SECONDS);
 
     private static Retrofit.Builder builder =
         new Retrofit.Builder()
@@ -35,12 +39,11 @@ public class FCoinApiServiceGenerator {
 
     public static <S> S createService(Class<S> serviceClass, String apiKey, String secret, String method, String url, String timestamp, Map params) {
         if (!StringUtils.isEmpty(apiKey) && !StringUtils.isEmpty(secret)) {
+            httpClient.interceptors().clear();
             FCoinAuthenticationInterceptor interceptor = new FCoinAuthenticationInterceptor(apiKey, secret, method,  url, timestamp, params);
-            if (!httpClient.interceptors().contains(interceptor)) {
-                httpClient.addInterceptor(interceptor);
-                builder.client(httpClient.build());
-                retrofit = builder.build();
-            }
+            httpClient.addInterceptor(interceptor);
+            builder.client(httpClient.build());
+            retrofit = builder.build();
         }
         return retrofit.create(serviceClass);
     }
